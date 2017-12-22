@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hakim.anview.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_above="@+id/listSend"
+        android:layout_marginBottom="8dp"
+        android:background="#ed4255"
+        app:layout_constraintBottom_toTopOf="@+id/listSend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="发送列表"
+            android:textColor="#ffffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lastTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            android:text="剩余时间"
+            android:textColor="#ffffffff"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listSend"
+        android:layout_width="0dp"
+        android:layout_height="511dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+
+</android.support.constraint.ConstraintLayout>
