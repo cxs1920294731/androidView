@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             public View getView(int i, View view, ViewGroup viewGroup) {
                 String number = send_list.get(i);
                 TextView tv = new TextView(MainActivity.this);
+                tv.setTextSize(20);
                 tv.setText(number);
                 return tv;
             }
@@ -115,10 +116,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private ArrayList<String> getData(){
         ArrayList<String> data = new ArrayList<String>();
-        data.add("测试数据1");
-        data.add("测试数据2");
-        data.add("测试数据3");
-        data.add("测试数据4");
+        for (int i=0;i<50;i++){
+            data.add("测试数据"+i);
+        }
         return data;
     }
 }
