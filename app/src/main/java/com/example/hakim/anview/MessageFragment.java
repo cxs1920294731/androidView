@@ -14,7 +14,6 @@ public class MessageFragment extends BaseFragement {
 
     @Override
     public int getLayoutId() {
-        Toast.makeText(mContext, "设置页面加载", Toast.LENGTH_SHORT).show();
         return R.layout.set_view;
     }
 

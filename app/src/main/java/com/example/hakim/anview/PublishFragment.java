@@ -14,7 +14,6 @@ public class PublishFragment extends BaseFragement {
 
     @Override
     public int getLayoutId() {
-        Toast.makeText(mContext, "HomeFragment页面请求数据了", Toast.LENGTH_SHORT).show();
         return R.layout.res_view;
     }
 

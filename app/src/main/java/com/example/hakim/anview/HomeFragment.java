@@ -12,7 +12,6 @@ public class HomeFragment extends BaseFragement {
     }
     @Override
     public int getLayoutId() {
-        Toast.makeText(mContext, "主页", Toast.LENGTH_SHORT).show();
         return R.layout.home_view;
     }
     @Override
