@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Fri Dec 22 22:39:37 CST 2017
+0.baseType=DIRECTORY
+0.base=D\:\\android\\SMS\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+0.path=classes.dex
+0.set=DEX
+count=1
