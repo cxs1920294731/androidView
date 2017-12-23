@@ -23,7 +23,7 @@ public class TimerT {
     private Handler myhandler;
     private Context context;
     public SQLiteDatabase db;
-    final private int timeunit= 1000*100;
+    final private int timeunit= 1000*60;
     private sendSMS send;
     private saveSet redSet;
     public TimerT(final Context context,SQLiteDatabase db){
@@ -75,7 +75,6 @@ public class TimerT {
                 if (isTime()){
                     myhandler.sendEmptyMessage(1);
                     timer = null;
-
                     timer = new Timer();
                     timeTask = null;
                     timeTask = new mytask();
