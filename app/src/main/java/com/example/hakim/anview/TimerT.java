@@ -23,7 +23,7 @@ public class TimerT {
     private Handler myhandler;
     private Context context;
     public SQLiteDatabase db;
-    final private int timeunit= 1000*60;
+    final private int timeunit= 1000;
     private sendSMS send;
     private saveSet redSet;
     public TimerT(final Context context,SQLiteDatabase db){
@@ -47,10 +47,10 @@ public class TimerT {
                         timer.cancel();
                         return;
                     }
-                    //Toast.makeText(context, text
-                    //       , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, text
+                           , Toast.LENGTH_SHORT).show();
                     //String num,String msg,String name,String id
-                    send.SendMsgIfSuc(sending.get(2), text,sending.get(1),sending.get(0));
+                    //send.SendMsgIfSuc(sending.get(2), text,sending.get(1),sending.get(0));
                 }
             }
         };
@@ -108,6 +108,11 @@ public class TimerT {
     }
     //开始计时
     public void startTime(){
-        timer.schedule(timeTask, 0, redSet.get_inter_time() * timeunit);
+        try{
+            timer.schedule(timeTask, 0, redSet.get_inter_time() * timeunit);
+        }catch (Exception e){
+
+        }
+
     }
 }

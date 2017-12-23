@@ -13,9 +13,12 @@
         android:layout_height="447dp"
         android:layout_marginTop="57dp"
         android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="@+id/relativeLayout">
 
         <TableLayout
@@ -66,7 +69,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="清除发送记录"/>
-
                 <Button
                     android:id="@+id/addSend"
                     android:layout_width="135dp"
