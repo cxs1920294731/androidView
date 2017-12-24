@@ -15,10 +15,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:orientation="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
         <Button
             android:id="@+id/setBu"
             android:layout_width="match_parent"
@@ -32,15 +34,17 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dip">
 
+
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
+
                 <TextView
                     android:id="@+id/interTimeName"
-                    android:layout_width="100dp"
+                    android:layout_width="77dp"
                     android:layout_height="match_parent"
-                    android:text="间隔时间"
-                     />
+                    android:text="间隔时间" />
                 <TextView
                     android:id="@+id/interTime"
                     android:layout_width="266dp"
@@ -51,11 +55,29 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="随机数" />
+
+                <TextView
+                    android:id="@+id/setRand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
                 <TextView
                     android:id="@+id/starTimeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="起始时间" />
+                    android:text="起始时间"
+                    android:textSize="14dp" />
                 <TextView
                     android:id="@+id/starTime"
                     android:layout_width="wrap_content"
@@ -78,25 +100,45 @@
                     android:layout_height="wrap_content"
                     android:text="" />
             </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:shrinkColumns="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textName1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="79dp"
                     android:layout_height="wrap_content"
                     android:text="短信1" />
 
-                <TextView
-                    android:id="@+id/text1"
-                    android:layout_width="wrap_content"
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+                <Button
+                    android:id="@+id/setText1"
+                    android:layout_width="62dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textName2"
@@ -104,23 +146,165 @@
                     android:layout_height="wrap_content"
                     android:text="短信2" />
 
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+                <Button
+                    android:id="@+id/setText2"
+                    android:layout_width="23dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <TextView
-                    android:id="@+id/text2"
+                    android:id="@+id/textName3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="短信3" />
+
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/setText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textName4"
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:text="短信4" />
+
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/setText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textName5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="短信5" />
+
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/setText5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textName6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="短信6" />
+
+                <ScrollView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="" />
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/setText6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="修改" />
             </TableRow>
         </TableLayout>
-        <Button
-            android:id="@+id/savePhone"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:background="@drawable/button"
-            android:text="导入通讯录"/>
-        <ListView
-            android:id="@+id/numList"
-            android:layout_width="match_parent"
-            android:layout_height="262dp" />
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/savePhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="导入通讯录" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="显示通讯录" />
+        </LinearLayout>
+
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/relativeLayout2"

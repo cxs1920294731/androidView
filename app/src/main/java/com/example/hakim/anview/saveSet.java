@@ -18,7 +18,7 @@ public class saveSet {
         this.context=context;
         this.db=db;
     }
-    public boolean save(Integer start_time,Integer end_time,Integer inter_time){
+    public boolean save(Integer start_time,Integer end_time,Integer inter_time,Integer rand_time){
         try{
             String sql="";
             String sql1="";
@@ -26,14 +26,14 @@ public class saveSet {
             Cursor cursor=db.rawQuery("select * from set_table where id=1",null);
             if (cursor!=null){
                 if (cursor.getCount()>0){
-                    sql="update set_table set start_time="+start_time+",end_time="+end_time+",interva_time="+inter_time+" where id=1";
+                    sql="update set_table set start_time="+start_time+",end_time="+end_time+",interva_time="+inter_time+",rand_time="+rand_time+" where id=1";
                     db.execSQL(sql);
                 }else {
-                    sql="insert into set_table VALUES (1,"+start_time+","+end_time+","+inter_time+")";
+                    sql="insert into set_table VALUES (1,"+start_time+","+end_time+","+inter_time+","+rand_time+")";
                     db.execSQL(sql);
                 }
             }else {
-                sql="insert into set_table VALUES (1,"+start_time+","+end_time+","+inter_time+")";
+                sql="insert into set_table VALUES (1,"+start_time+","+end_time+","+inter_time+","+rand_time+")";
                 db.execSQL(sql);
             }
             Toast.makeText(context, "保存成功"
@@ -46,7 +46,7 @@ public class saveSet {
     //取出设置的时长
     public int get_inter_time() {
         Cursor cursor = db.rawQuery("select * from set_table", null);
-        int inter = 20;
+        int inter = 10;
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 inter = Integer.parseInt(cursor.getString(cursor.getColumnIndex("interva_time")).toString());
@@ -54,7 +54,16 @@ public class saveSet {
         }
         return inter;
     }
-
+    public int get_rand_time(){
+        Cursor cursor = db.rawQuery("select * from set_table", null);
+        int inter = 5;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                inter = Integer.parseInt(cursor.getString(cursor.getColumnIndex("rand_time")).toString());
+            }
+        }
+        return inter;
+    }
     //取出设置id的开始与结束时间
     public int[] get_start_end_time() {
         int[] res = new int[2];
@@ -137,5 +146,15 @@ public class saveSet {
             x = "ca9";
         }
 
+    }
+    public String getText(int id){
+        String res="";
+        Cursor cursor=db.rawQuery("select * from save_text_table where id="+id,null);
+        if (cursor!=null){
+            while (cursor.moveToNext()){
+                res=cursor.getString(cursor.getColumnIndexOrThrow("content"));
+            }
+        }
+        return res;
     }
 }

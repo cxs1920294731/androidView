@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     saveSet saveset;
     TimerT timeCao;
     //定义数据
-    Button savePhone,setBu,saveSetBu,set_content1,set_content2,sendSms,clearSend,addSend;
+    Button savePhone,setBu,saveSetBu,set_content1,set_content2,set_content3,set_content4,set_content5,set_content6,sendSms,clearSend,addSend;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         dialog=new Dialog(this);
         savePhone= (Button) findViewById(R.id.savePhone);
         setBu=(Button) findViewById(R.id.setBu);
+        saveAllText();
         setBu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,36 +193,54 @@ public class MainActivity extends AppCompatActivity {
                 window.setContentView(R.layout.set_table);
                 saveSetBu=(Button) window.findViewById(R.id.saveSetBu);
                 final EditText IntervaTime = (EditText) window.findViewById(R.id.setInterTime);
+                final EditText randTime=(EditText) window.findViewById(R.id.setRandTime);
                 //开始和结束时间
                 final EditText StartTime = (EditText) window.findViewById(R.id.setStartTime);
                 final EditText endTime = (EditText) window.findViewById(R.id.setEndTime);
-                set_content1=(Button) window.findViewById(R.id.setText1);
-                set_content2=(Button) window.findViewById(R.id.setText2);
-                final EditText content1=(EditText) window.findViewById(R.id.setEditText1);
-                final EditText content2=(EditText) window.findViewById(R.id.setEditText2);
+                //set_content1=(Button) window.findViewById(R.id.setText1);
+                //set_content2=(Button) window.findViewById(R.id.setText2);
+                //final EditText content1=(EditText) window.findViewById(R.id.setEditText1);
+                //final EditText content2=(EditText) window.findViewById(R.id.setEditText2);
                 saveSetBu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Integer start_time = Integer.parseInt(StartTime.getText().toString());
-                        Integer end_time = Integer.parseInt(endTime.getText().toString());
-                        Integer inter_time = Integer.parseInt(IntervaTime.getText().toString());
-                        saveset.save(start_time, end_time, inter_time);
+                        //添加判断
+                        String start_time_s=StartTime.getText().toString();
+                        String randTime_s=randTime.getText().toString();
+                        String end_time_s = endTime.getText().toString();
+                        String inter_time_s = IntervaTime.getText().toString();
+                        if (is_string_enpty(start_time_s)||is_string_enpty(randTime_s)||is_string_enpty(end_time_s)||is_string_enpty(inter_time_s)){
+                            Toast.makeText(MainActivity.this, "请填写完整内容"
+                                    , Toast.LENGTH_SHORT).show();
+                        }else{
+                            Integer start_time = Integer.parseInt(StartTime.getText().toString());
+                            Integer randTime = Integer.parseInt(StartTime.getText().toString());
+                            Integer end_time = Integer.parseInt(endTime.getText().toString());
+                            Integer inter_time = Integer.parseInt(IntervaTime.getText().toString());
+                            if (inter_time<=randTime){
+                                Toast.makeText(MainActivity.this, "间隔时间应小于随机时间"
+                                        , Toast.LENGTH_SHORT).show();
+                            }else {
+                                saveset.save(start_time, end_time, inter_time,randTime);
+                            }
+                        }
+
                     }
                 });
-                set_content1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String text = content1.getText().toString();
-                        saveset.saveText(1, text);
-                    }
-                });
-                set_content2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String text = content2.getText().toString();
-                        saveset.saveText(2, text);
-                    }
-                });
+//                set_content1.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        String text = content1.getText().toString();
+//                        saveset.saveText(1, text);
+//                    }
+//                });
+//                set_content2.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        String text = content2.getText().toString();
+//                        saveset.saveText(2, text);
+//                    }
+//                });
             }
         });
         savePhone.setOnClickListener(new View.OnClickListener() {
@@ -289,20 +310,29 @@ public class MainActivity extends AppCompatActivity {
                 return tv;
             }
         };
-        final ListView listView1 = (ListView) findViewById(R.id.numList);
-        listView1.setAdapter(adapter);
+        //final ListView listView1 = (ListView) findViewById(R.id.numList);
+        //  listView1.setAdapter(adapter);
     }
     public void displaySet() {
-        TextView IntervaTime,StartTime,endTime,content1,content2;
+        TextView IntervaTime,Rand_time,StartTime,endTime,content1,content2,content3,content4,content5,content6;
         IntervaTime=(TextView) findViewById(R.id.interTime);
+        Rand_time=(TextView) findViewById(R.id.setRand);
         StartTime=(TextView) findViewById(R.id.starTime);
         endTime=(TextView) findViewById(R.id.endTime);
         content1=(TextView) findViewById(R.id.text1);
         content2=(TextView) findViewById(R.id.text2);
-        String text1 = "";
-        String text2 = "";
+        content3=(TextView) findViewById(R.id.text3);
+        content4=(TextView) findViewById(R.id.text4);
+        content5=(TextView) findViewById(R.id.text5);
+        content6=(TextView) findViewById(R.id.text6);
+        String text1 = saveset.getText(1);
+        String text2 = saveset.getText(2);
+        String text3=saveset.getText(3),text4=saveset.getText(4),text5=saveset.getText(5),
+        text6=saveset.getText(6);
+
+
         int i = 0;
-        String in_time = "", start_time = "", end_time = "";
+        String in_time = "", start_time = "", end_time = "",rand_time="";
         Cursor cursor = null, cursor1 = null;
         try {
             cursor = db.rawQuery("select * from save_text_table", null);
@@ -315,31 +345,25 @@ public class MainActivity extends AppCompatActivity {
         if (cursor1 != null) {
             while (cursor1.moveToNext()) {
                 //set start_time="+start_time+",end_time="+end_time+",interva_time="+inter_time+"
+                start_time = cursor1.getString(cursor1.getColumnIndexOrThrow("start_time"));
+                end_time = cursor1.getString(cursor1.getColumnIndexOrThrow("end_time"));
+                in_time = cursor1.getString(cursor1.getColumnIndexOrThrow("interva_time"));
+                rand_time=cursor1.getString(cursor1.getColumnIndexOrThrow("rand_time"));
+            }
+        }
 
-                start_time = cursor1.getString(cursor1.getColumnIndexOrThrow("start_time")).toString();
-                end_time = cursor1.getString(cursor1.getColumnIndexOrThrow("end_time")).toString();
-                in_time = cursor1.getString(cursor1.getColumnIndexOrThrow("interva_time")).toString();
-            }
-        }
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                if (i == 0) {
-                    text1 = cursor.getString(cursor.getColumnIndexOrThrow("content")).toString();
-                }
-                if (i == 1) {
-                    text2 = cursor.getString(cursor.getColumnIndexOrThrow("content")).toString();
-                }
-                i++;
-            }
-        }
         IntervaTime.setText(in_time);
+        Rand_time.setText(rand_time);
         //开始和结束时间
         StartTime.setText(start_time);
         endTime.setText(end_time);
         content1.setText(text1);
         content2.setText(text2);
-
-        if (i < 2) {
+        content3.setText(text3);
+        content4.setText(text4);
+        content5.setText(text5);
+        content6.setText(text6);
+        if (i < 6) {
             Toast.makeText(MainActivity.this, "请编辑短信内容"
                     , Toast.LENGTH_SHORT).show();
         }
@@ -424,5 +448,85 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+    public boolean is_string_enpty(String str){
+        //为空时返回true
+        boolean res=false;
+        if (str == null || str.length() <= 0){
+            res=true;
+        }
+        return res;
+    }
+    public void saveAllText(){
+        set_content1=(Button) findViewById(R.id.setText1);
+        set_content2=(Button) findViewById(R.id.setText2);
+        set_content3=(Button) findViewById(R.id.setText3);
+        set_content4=(Button) findViewById(R.id.setText4);
+        set_content5=(Button) findViewById(R.id.setText5);
+        set_content6=(Button) findViewById(R.id.setText6);
+        set_content1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(1);
+            }
+        });
+        set_content2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(2);
+            }
+        });
+        set_content3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(3);
+            }
+        });
+        set_content4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(4);
+            }
+        });
+        set_content5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(5);
+            }
+        });
+        set_content6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAllTextAler(6);
+            }
+        });
+    }
+    private void saveAllTextAler(int index){
+        View view1 = getLayoutInflater().inflate(R.layout.set_text, null);
+        final int id=index;
+        final Dialog alertDialog= new AlertDialog.Builder(MainActivity.this).setView(view1).setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //read.saveNumber(db);
+                    }
+                }).show();
+        Window window = alertDialog.getWindow();
+        window.setContentView(R.layout.set_text);
+        final EditText content1=(EditText) window.findViewById(R.id.setEditTextq);
+        Button setText =(Button) window.findViewById(R.id.setTextq);
+        setText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text = content1.getText().toString();
+                saveset.saveText(id, text);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        alertDialog.dismiss();
+                    }
+                },1000);
+            }
+        });
     }
 }

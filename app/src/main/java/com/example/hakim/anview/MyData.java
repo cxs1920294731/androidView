@@ -12,7 +12,7 @@ public class MyData extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table set_table (id integer,start_time integer,end_time integer,interva_time integer)");
+        sqLiteDatabase.execSQL("create table set_table (id integer,start_time integer,end_time integer,interva_time integer,rand_time integer)");
         sqLiteDatabase.execSQL("create table save_monbile_table (id INTEGER PRIMARY KEY AUTOINCREMENT,monbile varchar(225),name varchar(255))");
         sqLiteDatabase.execSQL("create table send_sms_table (num varchar(225),is_send integer,name varchar(225),numID integer)");
         sqLiteDatabase.execSQL("create table save_text_table (id integer,content varchar(225))");
