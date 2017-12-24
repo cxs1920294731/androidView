@@ -22,17 +22,25 @@ public class readContacts {
     public readContacts(Context context){
         this.context=context;
     }
-    public ArrayList<String> read(){
+    private String start;
+    private String end;
+    private ArrayList<ArrayList<String>> dataPhone=new ArrayList<>();
+    public ArrayList<String> read(String start,String end){
+        this.start=start;
+        this.end=end;
         ArrayList<String> res=new ArrayList<String>();
         ArrayList<String> sendList=new ArrayList<String>();
         ArrayList<String> no_sendList=new ArrayList<String>();
+        dataPhone.clear();
         cursor_num=context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null, android.provider.ContactsContract.Contacts.SORT_KEY_PRIMARY);
         int i=0;
+        Boolean sta=false;
         if (cursor_num != null) {
             while (cursor_num.moveToNext()) {
                 i++;
                 // 得到手机号码
+                ArrayList<String> row=new ArrayList<>();
                 String phoneNumber = cursor_num.getString(cursor_num
                         .getColumnIndex(ContactsContract
                                 .CommonDataKinds.Phone.NUMBER))
@@ -42,10 +50,22 @@ public class readContacts {
                 String PhoneID = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts._ID));
                 String phoneName = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts.DISPLAY_NAME));
                 // 当手机号码为空的或者为空字段 跳过当前循环
-                if (is_cell_num(phoneNumber)){
-                    sendList.add(i+"--"+phoneName+"--"+phoneNumber);
-                }else {
-                    no_sendList.add(i+"--"+phoneName+"--"+phoneNumber);
+                if (phoneName.equals(start)){
+                    sta=true;
+                }
+
+                if (sta){
+                    if (is_cell_num(phoneNumber)){
+                        row.add(phoneName);
+                        row.add(phoneNumber);
+                        dataPhone.add(row);
+                        sendList.add(i+"--"+phoneName+"--"+phoneNumber);
+                    }else {
+                        no_sendList.add(i+"--"+phoneName+"--"+phoneNumber);
+                    }
+                }
+                if (phoneName.equals(end)){
+                    sta=false;
                 }
             }
             res.add("不符合条件的号码");
@@ -58,26 +78,10 @@ public class readContacts {
     public Boolean saveNumber(SQLiteDatabase db){
         try{
             db.execSQL("delete from save_monbile_table");
-            if (cursor_num!=null){
-                cursor_num.moveToFirst();
-                while (cursor_num.moveToNext()){
-                    String phoneNumber = cursor_num.getString(cursor_num
-                            .getColumnIndex(ContactsContract
-                                    .CommonDataKinds.Phone.NUMBER))
-                            .replace("-", "")
-                            .replace(" ", "")
-                            .replace("+", "");
-                    String PhoneID = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts._ID));
-                    String phoneName = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts.DISPLAY_NAME));
-                    // 当手机号码为空的或者为空字段 跳过当前循环
-                    if (is_cell_num(phoneNumber)){
-                        //insert into set_table VALUES (1,"+start_time+","+end_time+","+inter_time+")"
-                        db.execSQL("insert into save_monbile_table (monbile,name) values ('"+phoneNumber+"','"+phoneName+"')");
-                        //sendList.add(i+"--"+phoneName+"--"+phoneNumber);
-                    }else {
-                        //no_sendList.add(i+"--"+phoneName+"--"+phoneNumber);
-                    }
-                }
+            for (int i=0;i< dataPhone.size();i++){
+                String phoneName=  dataPhone.get(i).get(0);
+                String phoneNumber=dataPhone.get(i).get(1);
+                db.execSQL("insert into save_monbile_table (monbile,name) values ('"+phoneNumber+"','"+phoneName+"')");
             }
             Toast.makeText(context, "保存成功"
                     , Toast.LENGTH_SHORT).show();

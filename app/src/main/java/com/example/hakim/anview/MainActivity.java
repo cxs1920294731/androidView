@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     TimerT timeCao;
     //定义数据
     Button savePhone,setBu,saveSetBu,set_content1,set_content2,set_content3,set_content4,set_content5,set_content6,sendSms,clearSend,addSend;
-
+    Button disPlayPhone;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     mViewPager.setCurrentItem(1);
                     ininSetView();
-                    displayPhone();
+                    //displayPhone();
                     return true;
                 case R.id.navigation_notifications:
                     mViewPager.setCurrentItem(2);
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         dialog=new Dialog(this);
         savePhone= (Button) findViewById(R.id.savePhone);
         setBu=(Button) findViewById(R.id.setBu);
+        disPlayPhone=(Button) findViewById(R.id.displayPhone);
         saveAllText();
         setBu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,10 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 //开始和结束时间
                 final EditText StartTime = (EditText) window.findViewById(R.id.setStartTime);
                 final EditText endTime = (EditText) window.findViewById(R.id.setEndTime);
-                //set_content1=(Button) window.findViewById(R.id.setText1);
-                //set_content2=(Button) window.findViewById(R.id.setText2);
-                //final EditText content1=(EditText) window.findViewById(R.id.setEditText1);
-                //final EditText content2=(EditText) window.findViewById(R.id.setEditText2);
+
                 saveSetBu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -222,74 +220,93 @@ public class MainActivity extends AppCompatActivity {
                                         , Toast.LENGTH_SHORT).show();
                             }else {
                                 saveset.save(start_time, end_time, inter_time,randTime);
+                                displaySet();
                             }
                         }
 
                     }
                 });
-//                set_content1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String text = content1.getText().toString();
-//                        saveset.saveText(1, text);
-//                    }
-//                });
-//                set_content2.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String text = content2.getText().toString();
-//                        saveset.saveText(2, text);
-//                    }
-//                });
+            }
+        });
+        disPlayPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayPhone();
             }
         });
         savePhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ArrayList<String> num_list = read.read();
-                BaseAdapter adapter = new BaseAdapter() {
-                    @Override
-                    public int getCount() {
-                        return num_list.size();
-                    }
-                    @Override
-                    public Object getItem(int i) {
-                        return i;
-                    }
-                    @Override
-                    public long getItemId(int i) {
-                        return i;
-                    }
-                    @Override
-                    public View getView(int i, View view, ViewGroup viewGroup) {
-                        String number = num_list.get(i);
-                        TextView tv = new TextView(MainActivity.this);
-                        tv.setTextSize(20);
-                        tv.setPadding(3,1,0,1);
-                        tv.setText(number);
-                        return tv;
-                    }
-                };
-                View listView = getLayoutInflater().inflate(R.layout.list, null);
-                final ListView listView1 = (ListView) listView.findViewById(R.id.list1);
-                listView1.setAdapter(adapter);
-                new AlertDialog.Builder(MainActivity.this).setView(listView).setPositiveButton("确定",
+                View listViewq = getLayoutInflater().inflate(R.layout.push_content, null);
+                final Dialog alertDialog1= new AlertDialog.Builder(MainActivity.this).setView(listViewq).setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                read.saveNumber(db);
+                                //read.saveNumber(db);
                             }
                         }).show();
+                Window window = alertDialog1.getWindow();
+                window.setContentView(R.layout.push_content);
+                final EditText startName=(EditText) window.findViewById(R.id.setStartCon);
+                final EditText endName=(EditText) window.findViewById(R.id.setEndCon);
+                Button readCon=(Button) window.findViewById(R.id.readCon);
+                readCon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String sart=startName.getText().toString();
+                        String end=endName.getText().toString();
+                        if (is_string_enpty(sart)||is_string_enpty(end)){
+                            Toast.makeText(MainActivity.this, "请填写号码段"
+                                    , Toast.LENGTH_SHORT).show();
+                        }else {
+                            final ArrayList<String> num_list = read.read(sart,end);
+                            alertDialog1.dismiss();
+                            BaseAdapter adapter = new BaseAdapter() {
+                                @Override
+                                public int getCount() {
+                                    return num_list.size();
+                                }
+                                @Override
+                                public Object getItem(int i) {
+                                    return i;
+                                }
+                                @Override
+                                public long getItemId(int i) {
+                                    return i;
+                                }
+                                @Override
+                                public View getView(int i, View view, ViewGroup viewGroup) {
+                                    String number = num_list.get(i);
+                                    TextView tv = new TextView(MainActivity.this);
+                                    tv.setTextSize(20);
+                                    tv.setPadding(3,1,0,1);
+                                    tv.setText(number);
+                                    return tv;
+                                }
+                            };
+                            View listView = getLayoutInflater().inflate(R.layout.list, null);
+                            final ListView listView1 = (ListView) listView.findViewById(R.id.list1);
+                            listView1.setAdapter(adapter);
+                            new AlertDialog.Builder(MainActivity.this).setView(listView).setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            read.saveNumber(db);
+                                        }
+                                    }).show();
+                        }
+                    }
+                });
             }
         });
     }
     private void displayPhone(){
 
-        final ArrayList<String> data = read.getPhoneList(db);
+        final ArrayList<String> dataList = read.getPhoneList(db);
         BaseAdapter adapter = new BaseAdapter() {
             @Override
             public int getCount() {
-                return data.size();
+                return dataList.size();
             }
             @Override
             public Object getItem(int i) {
@@ -302,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
-                String number = data.get(i);
+                String number = dataList.get(i);
                 TextView tv = new TextView(MainActivity.this);
                 tv.setTextSize(18);
                 tv.setPadding(3,1,0,1);
@@ -310,8 +327,16 @@ public class MainActivity extends AppCompatActivity {
                 return tv;
             }
         };
-        //final ListView listView1 = (ListView) findViewById(R.id.numList);
-        //  listView1.setAdapter(adapter);
+        View listView = getLayoutInflater().inflate(R.layout.list, null);
+        final ListView listView1 = (ListView) listView.findViewById(R.id.list1);
+        listView1.setAdapter(adapter);
+        new AlertDialog.Builder(MainActivity.this).setView(listView).setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
     }
     public void displaySet() {
         TextView IntervaTime,Rand_time,StartTime,endTime,content1,content2,content3,content4,content5,content6;
@@ -329,8 +354,6 @@ public class MainActivity extends AppCompatActivity {
         String text2 = saveset.getText(2);
         String text3=saveset.getText(3),text4=saveset.getText(4),text5=saveset.getText(5),
         text6=saveset.getText(6);
-
-
         int i = 0;
         String in_time = "", start_time = "", end_time = "",rand_time="";
         Cursor cursor = null, cursor1 = null;
@@ -363,10 +386,6 @@ public class MainActivity extends AppCompatActivity {
         content4.setText(text4);
         content5.setText(text5);
         content6.setText(text6);
-        if (i < 6) {
-            Toast.makeText(MainActivity.this, "请编辑短信内容"
-                    , Toast.LENGTH_SHORT).show();
-        }
     }
     public void ininIndex(){
         sendSms=(Button) findViewById(R.id.sendSms);
@@ -520,6 +539,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String text = content1.getText().toString();
                 saveset.saveText(id, text);
+                displaySet();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
