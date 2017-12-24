@@ -45,6 +45,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.example.hakim.anview.sendService" />
+
         <meta-data
             android:name="android.support.VERSION"
             android:value="26.1.0" />
