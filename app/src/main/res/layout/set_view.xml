@@ -22,7 +22,10 @@
         <Button
             android:id="@+id/setBu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
+            android:background="@drawable/button"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:text="修改配置" />
         <TableLayout
             android:layout_width="match_parent"
@@ -111,9 +114,9 @@
         <Button
             android:id="@+id/savePhone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
+            android:background="@drawable/button"
             android:text="导入通讯录"/>
-
         <ListView
             android:id="@+id/numList"
             android:layout_width="match_parent"
