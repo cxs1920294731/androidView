@@ -36,7 +36,7 @@ public class sendSMS {
                         //update save_text_table set content='"+text+"' where id="+id num varchar(225),is_send integer
                         //
                         //String x=intent.getStringExtra("msg");
-                        db.execSQL("update send_result_table set res='发出,未接收' where num='"+intent.getStringExtra("msg")+"'");
+                        db.execSQL("update send_result_table set res='发出'  where num='"+intent.getStringExtra("msg")+"'");
                         //Toast.makeText(context, "短信发出"+intent.getStringExtra("msg"), Toast.LENGTH_LONG).show();
                         break;
                     // 短信发送不成功
@@ -58,7 +58,7 @@ public class sendSMS {
             switch (getResultCode()) {
                 // 短信发送成功
                 case Activity.RESULT_OK:
-                    db.execSQL("update send_result_table set res='成功接收' where num='"+intent.getStringExtra("msg")+"'");
+                    db.execSQL("update send_result_table set res='接收' where num='"+intent.getStringExtra("msg")+"'");
                     //Toast.makeText(context, "对方失败，请重新发送！", Toast.LENGTH_LONG).show();
                     break;
                 // 短信发送不成功

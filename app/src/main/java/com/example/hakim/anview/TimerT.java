@@ -31,62 +31,8 @@ public class TimerT {
         this.db=db;
         this.send=new sendSMS(context,db);
         this.redSet=new saveSet(context,db);
-        this.myhandler=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == 1) {
-                    String  text;
-                    ArrayList<String> sending=redSet.sendPone();
-                    text = redSet.selectText();
-                    if (text==""||text==null){
-                        Toast.makeText(context, text
-                                , Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (sending.get(2) == "" || sending.get(2) == null){
-                        timer.cancel();
-                        return;
-                    }
-                    Toast.makeText(context, text
-                           , Toast.LENGTH_SHORT).show();
-                    //String num,String msg,String name,String id
-                    //send.SendMsgIfSuc(sending.get(2), text,sending.get(1),sending.get(0));
-                }
-            }
-        };
     }
 
-    class mytask extends TimerTask {
-        @Override
-        public void run() {
-            try {
-                timer.cancel();
-                //分为是否包含24
-                Random rand = new Random();
-                //random.nextInt(max)%(max-min+1) + min
-                int time = redSet.get_inter_time();
-                int i = 3, delay;
-                if (time < 10) {
-                    i = 0;
-                }
-                int max = time + i;
-                int min = time - i;
-                delay = rand.nextInt(max) % (i + 1) + min;
-                if (isTime()){
-                    myhandler.sendEmptyMessage(1);
-                    timer = null;
-                    timer = new Timer();
-                    timeTask = null;
-                    timeTask = new mytask();
-                    timer.schedule(timeTask, delay * timeunit, 10000000);
-                }
-            } catch (Exception e) {
-                String x = "cap";
-            }
-        }
-    }
-
-    private mytask timeTask=new mytask();
     public boolean isTime(){
         int[] a = new int[2];
         a = redSet.get_start_end_time();
@@ -94,13 +40,13 @@ public class TimerT {
         Integer x = t.hour;
         if (a[0] > a[1]) {
             //包24小时
-            if ((a[0] < x && a[1] > 24) || (x < a[1] && x >= 0)) {
+            if ((a[0] <= x && a[1] >= 24) || (x <= a[1] && x >= 0)) {
                 //timer.cancel();
                 return true;
             }
         } else {
             //不包24
-            if (a[0] < x && a[1] > x) {
+            if (a[0] <= x && a[1] >= x) {
                 return true;
             }
         }
@@ -108,11 +54,31 @@ public class TimerT {
     }
     //开始计时
     public void startTime(){
-        try{
-            timer.schedule(timeTask, 0, redSet.get_inter_time() * timeunit);
-        }catch (Exception e){
-
+        if (isTime()){
+            String  text;
+            ArrayList<String> sending=redSet.sendPone();
+            text = redSet.selectText();
+            if (text==""||text==null){
+                return;
+            }
+            if (sending.get(2) == "" || sending.get(2) == null){
+                return;
+            }
+            Toast.makeText(context, text
+                    , Toast.LENGTH_SHORT).show();
+            //String num,String msg,String name,String id
+            send.SendMsgIfSuc(sending.get(2), text,sending.get(1),sending.get(0));
         }
-
+    }
+    //得到设置的时间搓
+    public  int getRandTime(){
+        int res;
+        Random rand = new Random();
+        int time = redSet.get_inter_time();
+        int i=redSet.get_rand_time();
+        int max = time + i;
+        int min = time - i;
+        res = (rand.nextInt(max) % (i + 1) + min)*60*1000;
+        return res;
     }
 }

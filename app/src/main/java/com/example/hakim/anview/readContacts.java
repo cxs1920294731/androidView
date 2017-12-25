@@ -140,14 +140,21 @@ public class readContacts {
     public ArrayList<String> getRes(SQLiteDatabase db){
         ArrayList<String> res = new  ArrayList<String>();
         Cursor cursor= db.rawQuery("select * from send_result_table",null );
-        if (cursor!=null){
-            while (cursor.moveToNext()){
+        if (cursor!=null&&cursor.getCount()>0){
+            cursor.moveToLast();
+            String sms = cursor.getString(cursor.getColumnIndex("num"));
+            String smsID = cursor.getString(cursor.getColumnIndexOrThrow("id"));
+            String smsName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            String msg=cursor.getString(cursor.getColumnIndexOrThrow("res"));
+            String sendTime=cursor.getString(cursor.getColumnIndexOrThrow("sendTime"));
+            res.add(smsID+"---"+smsName+"---"+sms+"---"+msg+"--"+sendTime);
+            while (cursor.moveToPrevious()){
                 //id integer,num varchar(225),res varchar(255),name varchar(255))"
-                String sms = cursor.getString(cursor.getColumnIndex("num"));
-                String smsID = cursor.getString(cursor.getColumnIndexOrThrow("id"));
-                String smsName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-                String msg=cursor.getString(cursor.getColumnIndexOrThrow("res"));
-                String sendTime=cursor.getString(cursor.getColumnIndexOrThrow("sendTime"));
+                sms = cursor.getString(cursor.getColumnIndex("num"));
+                smsID = cursor.getString(cursor.getColumnIndexOrThrow("id"));
+                smsName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                msg=cursor.getString(cursor.getColumnIndexOrThrow("res"));
+                sendTime=cursor.getString(cursor.getColumnIndexOrThrow("sendTime"));
                 res.add(smsID+"---"+smsName+"---"+sms+"---"+msg+"--"+sendTime);
             }
         }

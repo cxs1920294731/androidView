@@ -45,10 +45,13 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
     saveSet saveset;
     TimerT timeCao;
+    private int timeR;
+    private Intent myservice;
     private ProgressBar progressBar;
     //定义数据
     Button savePhone,setBu,saveSetBu,set_content1,set_content2,set_content3,set_content4,set_content5,set_content6,sendSms,clearSend,addSend;
     Button disPlayPhone;
+    TextView lastView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -91,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         dehelper = new MyData(this, "mySend.db3", null, 1);
         db = dehelper.getReadableDatabase();
         saveset=new saveSet(this,db);
@@ -119,12 +121,6 @@ public class MainActivity extends AppCompatActivity {
         /*给底部导航栏菜单项添加点击事件*/
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //注册后台事件
-
-        receiver=new MyReceiver();
-        IntentFilter filter=new IntentFilter();
-        filter.addAction("com.example.hakim.anview.MyReceiver");
-        MainActivity.this.registerReceiver(receiver,filter);
-        startService(new Intent(MainActivity.this, sendService.class));
     }
     private void displaySend(){
         final ArrayList<String> send_list=read.getList(db);
@@ -226,14 +222,14 @@ public class MainActivity extends AppCompatActivity {
                                     , Toast.LENGTH_SHORT).show();
                         }else{
                             Integer start_time = Integer.parseInt(StartTime.getText().toString());
-                            Integer randTime = Integer.parseInt(StartTime.getText().toString());
+                            Integer rand_time = Integer.parseInt(randTime.getText().toString());
                             Integer end_time = Integer.parseInt(endTime.getText().toString());
                             Integer inter_time = Integer.parseInt(IntervaTime.getText().toString());
-                            if (inter_time<=randTime){
-                                Toast.makeText(MainActivity.this, "间隔时间应小于随机时间"
+                            if (inter_time<=rand_time){
+                                Toast.makeText(MainActivity.this, "间隔时间应大于随机时间"
                                         , Toast.LENGTH_SHORT).show();
                             }else {
-                                saveset.save(start_time, end_time, inter_time,randTime);
+                                saveset.save(start_time, end_time, inter_time,rand_time);
                                 displaySet();
                             }
                         }
@@ -413,10 +409,36 @@ public class MainActivity extends AppCompatActivity {
                 db.execSQL("delete  from send_sms_table");
             }
         });
+        lastView=(TextView) findViewById(R.id.lastTimeIn);
+
         sendSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timeCao.startTime();
+                receiver=new MyReceiver();
+                IntentFilter filter=new IntentFilter();
+                filter.addAction("com.example.hakim.anview.MyReceiver");
+                MainActivity.this.registerReceiver(receiver,filter);
+                if (myservice==null){
+                    myservice= new Intent(MainActivity.this, sendService.class);
+                    startService(myservice);
+                }else {
+                    final Dialog alertDialog= new AlertDialog.Builder(MainActivity.this).setMessage("是否关闭当前进程").setPositiveButton("是",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //read.saveNumber(db);
+                                    stopService(myservice);
+                                    myservice = null;
+                                }
+                            }).setNegativeButton("否", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+//                    stopService(myservice);
+//                    myservice = null;
+                }
             }
         });
         addSend.setOnClickListener(new View.OnClickListener() {
@@ -455,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
                         if (i>0){
                             Toast.makeText(MainActivity.this, "保存成功"
                                     , Toast.LENGTH_SHORT).show();
+                            displaySend();
                         }else {
                             Toast.makeText(MainActivity.this, "未查到数据"
                                     , Toast.LENGTH_SHORT).show();
@@ -468,7 +491,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
     public boolean is_empty(String name) {
         //db.execSQL("delete from send_sms_table");
@@ -569,9 +591,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle=intent.getExtras();
             int count=bundle.getInt("count");
             //progressBar.setProgress(count);
-            //editText.setText(count+"");
-            int x=0;
-                   x= count;
+            lastView.setText(count+"");
         }
     }
 }
