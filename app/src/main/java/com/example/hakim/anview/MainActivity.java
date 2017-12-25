@@ -26,6 +26,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
     saveSet saveset;
     TimerT timeCao;
+    private ProgressBar progressBar;
     //定义数据
     Button savePhone,setBu,saveSetBu,set_content1,set_content2,set_content3,set_content4,set_content5,set_content6,sendSms,clearSend,addSend;
     Button disPlayPhone;
@@ -117,11 +119,12 @@ public class MainActivity extends AppCompatActivity {
         /*给底部导航栏菜单项添加点击事件*/
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //注册后台事件
-        startService(new Intent(MainActivity.this, sendService.class));
+
         receiver=new MyReceiver();
         IntentFilter filter=new IntentFilter();
-        filter.addAction("com.example.hakim.anview.sendService");
+        filter.addAction("com.example.hakim.anview.MyReceiver");
         MainActivity.this.registerReceiver(receiver,filter);
+        startService(new Intent(MainActivity.this, sendService.class));
     }
     private void displaySend(){
         final ArrayList<String> send_list=read.getList(db);
@@ -565,8 +568,10 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle bundle=intent.getExtras();
             int count=bundle.getInt("count");
+            //progressBar.setProgress(count);
             //editText.setText(count+"");
-            String x="caoi";
+            int x=0;
+                   x= count;
         }
     }
 }
