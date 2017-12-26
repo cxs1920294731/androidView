@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -36,7 +37,8 @@ public class sendSMS {
                         //update save_text_table set content='"+text+"' where id="+id num varchar(225),is_send integer
                         //
                         //String x=intent.getStringExtra("msg");
-                        db.execSQL("update send_result_table set res='发出'  where num='"+intent.getStringExtra("msg")+"'");
+                        int index=getResId(intent.getStringExtra("msg"));
+                        db.execSQL("update send_result_table set res='发出'  where resID="+index+" and num='"+intent.getStringExtra("msg")+"'");
                         //Toast.makeText(context, "短信发出"+intent.getStringExtra("msg"), Toast.LENGTH_LONG).show();
                         break;
                     // 短信发送不成功
@@ -58,7 +60,8 @@ public class sendSMS {
             switch (getResultCode()) {
                 // 短信发送成功
                 case Activity.RESULT_OK:
-                    db.execSQL("update send_result_table set res='接收' where num='"+intent.getStringExtra("msg")+"'");
+                    int index=getResId(intent.getStringExtra("msg"));
+                    db.execSQL("update send_result_table set res='接收' where resID="+index+" and num='"+intent.getStringExtra("msg")+"'");
                     //Toast.makeText(context, "对方失败，请重新发送！", Toast.LENGTH_LONG).show();
                     break;
                 // 短信发送不成功
@@ -83,7 +86,6 @@ public class sendSMS {
     public void SendMsgIfSuc(String num,String msg,String name,String id){
         SmsManager sms= SmsManager.getDefault();
         try {
-
             Intent SendIt =new Intent(SMS_SEND_ACTIOIN);
             SendIt.putExtra("msg",num);
             Intent DevliverIt=new Intent(SMS_DELIVERED_ACTION);
@@ -98,7 +100,8 @@ public class sendSMS {
             android.text.format.Time t = new android.text.format.Time();
             t.setToNow();
             String senfTime= getTime();
-            db.execSQL("insert into send_result_table VALUES ("+Numid+","+num+",'发送未成功','"+name+"','"+senfTime+"')");
+            //id integer,num varchar(225),res varchar(255),name varchar(255),sendTime varchar(255))");
+            db.execSQL("insert into send_result_table (id,num,res,name,sendTime) VALUES ("+Numid+","+num+",'发送未成功','"+name+"','"+senfTime+"')");
             db.execSQL("update send_sms_table set is_send=1 where num='"+num+"'");
         }catch (Exception e){
             Toast.makeText(context, e.toString()
@@ -115,5 +118,16 @@ public class sendSMS {
         t.setToNow();
         String timeX=t.year+"-"+(t.month+1)+"-"+t.monthDay+" "+t.hour+":"+t.minute;
         return timeX;
+    }
+    private int getResId(String num){
+        int res=0;
+        // db.execSQL("update send_result_table set res='发出'  where num='"+intent.getStringExtra("msg")+"'");
+        Cursor cursor=db.rawQuery("select * from  send_result_table where num='"+num+"'",null);
+        if (cursor!=null){
+            while (cursor.moveToNext()){
+                res=cursor.getInt(cursor.getColumnIndexOrThrow("resID"));
+            }
+        }
+        return res;
     }
 }

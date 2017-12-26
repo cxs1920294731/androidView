@@ -407,10 +407,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 db.execSQL("delete  from send_sms_table");
+                displaySend();
             }
         });
         lastView=(TextView) findViewById(R.id.lastTimeIn);
-
         sendSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

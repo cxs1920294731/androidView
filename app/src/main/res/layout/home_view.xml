@@ -20,9 +20,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout">
+
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="145dp">
+            android:layout_height="wrap_content">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -38,8 +39,8 @@
                 <EditText
                     android:id="@+id/StartNum"
                     android:layout_width="131dp"
-                    android:gravity="top"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
                     android:lines="1" />
             </TableRow>
 
@@ -61,34 +62,37 @@
                     android:lines="1" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/clearSend"
-                    android:layout_width="134dp"
-                    android:layout_height="42dp"
-                    android:background="@drawable/button"
-                    android:text="清除发送记录" />
-
-                <Button
-                    android:id="@+id/addSend"
-                    android:layout_width="108dp"
-                    android:layout_height="42dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/button"
-                    android:text="导入数据" />
-
-                <Button
-                    android:id="@+id/sendSms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:background="@drawable/button"
-                    android:text="发送" />
-            </TableRow>
         </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/clearSend"
+                android:layout_width="134dp"
+                android:layout_height="42dp"
+                android:background="@drawable/button"
+                android:text="清除发送记录" />
+
+            <Button
+                android:id="@+id/addSend"
+                android:layout_width="108dp"
+                android:layout_height="42dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/button"
+                android:text="导入数据" />
+
+            <Button
+                android:id="@+id/sendSms"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:background="@drawable/button"
+                android:text="发送" />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/listSend"
             android:layout_width="match_parent"
