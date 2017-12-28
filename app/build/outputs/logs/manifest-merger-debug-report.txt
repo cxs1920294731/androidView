@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
 MERGED from [com.android.support:design:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\design-26.1.0.aar\335a9d1aae8ab3cf51082dbea760918b\AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:appcompat-v7:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\appcompat-v7-26.1.0.aar\6e3080bf495298eb149dd544cd08e4f2\AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\573e68c163712b698aa5a74ad8f34cae\AndroidManifest.xml:2:1-11:12
@@ -18,20 +18,20 @@ MERGED from [com.android.support:support-core-utils:26.1.0] C:\Users\Hakim\.grad
 MERGED from [com.android.support:support-core-ui:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\support-core-ui-26.1.0.aar\93f57126f306aeeef54bea5596c235d3\AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-compat:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\support-compat-26.1.0.aar\d11789bd4adc0050ddc3e057e716ff63\AndroidManifest.xml:17:1-31:12
 MERGED from [android.arch.lifecycle:runtime:1.0.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\runtime-1.0.0.aar\dab2d101f142cf68a9dbac1931b87454\AndroidManifest.xml:17:1-30:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
 	package
 		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:3:5-39
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-47:12
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:1-49:12
 		INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:2:11-69
@@ -76,7 +76,7 @@ ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:16:5-67
 	android:name
 		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:16:22-65
 application
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:17:5-45:19
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:18:5-47:19
 MERGED from [com.android.support:design:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\design-26.1.0.aar\335a9d1aae8ab3cf51082dbea760918b\AndroidManifest.xml:25:5-29:19
 MERGED from [com.android.support:design:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\design-26.1.0.aar\335a9d1aae8ab3cf51082dbea760918b\AndroidManifest.xml:25:5-29:19
 MERGED from [com.android.support:appcompat-v7:26.1.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\appcompat-v7-26.1.0.aar\6e3080bf495298eb149dd544cd08e4f2\AndroidManifest.xml:25:5-29:19
@@ -106,57 +106,59 @@ MERGED from [com.android.support:support-compat:26.1.0] C:\Users\Hakim\.gradle\c
 MERGED from [android.arch.lifecycle:runtime:1.0.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\runtime-1.0.0.aar\dab2d101f142cf68a9dbac1931b87454\AndroidManifest.xml:24:5-28:19
 MERGED from [android.arch.lifecycle:runtime:1.0.0] C:\Users\Hakim\.gradle\caches\transforms-1\files-1.1\runtime-1.0.0.aar\dab2d101f142cf68a9dbac1931b87454\AndroidManifest.xml:24:5-28:19
 	android:supportsRtl
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:22:9-35
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:23:9-35
 	android:label
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:20:9-41
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:21:9-41
 	android:roundIcon
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:21:9-54
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:22:9-54
+	android:persistent
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:24:9-34
 	android:icon
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:19:9-43
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:20:9-43
 	android:allowBackup
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:18:9-35
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:19:9-35
 	android:theme
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:23:9-40
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:25:9-40
 activity#com.example.hakim.anview.MainActivity
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:24:9-32:20
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:26:9-34:20
 	android:label
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:26:13-32
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:28:13-32
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:25:13-41
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:27:13-41
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:27:13-31:29
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:29:13-33:29
 action#android.intent.action.MAIN
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:28:17-69
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:30:17-69
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:28:25-66
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:30:25-66
 category#android.intent.category.LAUNCHER
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:30:17-77
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:32:17-77
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:30:27-74
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:32:27-74
 receiver#com.example.hakim.anview.ReceiverListner
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:34:9-38:20
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:36:9-40:20
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:34:19-50
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:36:19-50
 intent-filter#android.provider.Telephony.SMS_RECEIVED
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:35:13-37:29
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:37:13-39:29
 	android:priority
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:35:28-51
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:37:28-51
 action#android.provider.Telephony.SMS_RECEIVED
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:36:17-82
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:38:17-82
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:36:25-79
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:38:25-79
 receiver#com.example.hakim.anview.MyReceiver
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:39:9-57
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:41:9-57
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:39:19-45
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:41:19-45
 service#com.example.hakim.anview.sendService
-ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:41:9-44:47
+ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:43:9-46:47
 	android:enabled
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:43:13-35
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:45:13-35
 	android:exported
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:44:13-36
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:46:13-36
 	android:name
-		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:42:13-40
+		ADDED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml:44:13-40
 uses-sdk
 INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from F:\gitPRO\AndroidVIew\app\src\main\AndroidManifest.xml
