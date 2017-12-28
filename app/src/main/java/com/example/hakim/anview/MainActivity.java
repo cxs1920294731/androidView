@@ -1,6 +1,7 @@
 package com.example.hakim.anview;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -8,14 +9,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private BottomNavigationView navigation;
     private NoSlidingViewPaper mViewPager;
-    private MyReceiver receiver=null;
+    private MyReceiver receiver = null;
     readContacts read = new readContacts(this);
     MyData dehelper;
     SQLiteDatabase db;
@@ -48,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private int timeR;
     private Intent myservice;
     private ProgressBar progressBar;
+    //权限判断
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS};
+    private AlertDialog dialogQ;
     //定义数据
-    Button savePhone,setBu,saveSetBu,set_content1,set_content2,set_content3,set_content4,set_content5,set_content6,sendSms,clearSend,addSend;
+    Button savePhone, setBu, saveSetBu, set_content1, set_content2, set_content3, set_content4, set_content5, set_content6, sendSms, clearSend, addSend;
     Button disPlayPhone;
     TextView lastView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -60,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     mViewPager.setCurrentItem(0);
                     ininIndex();
-                    displaySend();
                     return true;
                 case R.id.navigation_dashboard:
                     mViewPager.setCurrentItem(1);
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
     //双击才能退出程序
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -90,14 +100,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // 检查该权限是否已经获取
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            if (i != PackageManager.PERMISSION_GRANTED) {
+                // 如果没有授予该权限，就去提示用户请求
+                showDialogTipUserRequestPermission();
+            }
+        }
         dehelper = new MyData(this, "mySend.db3", null, 1);
         db = dehelper.getReadableDatabase();
-        saveset=new saveSet(this,db);
-        timeCao=new TimerT(this,db);
+        saveset = new saveSet(this, db);
+        timeCao = new TimerT(this, db);
         mViewPager = (NoSlidingViewPaper) findViewById(R.id.vp_main_container);
         final ArrayList<Fragment> fgLists = new ArrayList<Fragment>(3);
         fgLists.add(new HomeFragment());
@@ -108,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public Fragment getItem(int position) {
                 return fgLists.get(position);
             }
+
             @Override
             public int getCount() {
                 return fgLists.size();
@@ -115,62 +136,75 @@ public class MainActivity extends AppCompatActivity {
         };
         mViewPager.setAdapter(mAdapter);
         //mViewPager.setOffscreenPageLimit(0); //预加载剩下两页
-        mViewPager.setCurrentItem(0);
-        //displaySend();
+        //mViewPager.setCurrentItem(0);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         /*给底部导航栏菜单项添加点击事件*/
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //注册后台事件
+        //权限申请
     }
-    private void displaySend(){
-        final ArrayList<String> send_list=read.getList(db);
+
+    protected void onResume(){
+        super.onResume();
+        mViewPager.setCurrentItem(0);
+    }
+    private void displaySend() {
+        final ArrayList<String> send_list = read.getList(db);
         BaseAdapter adapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 return send_list.size();
             }
+
             @Override
             public Object getItem(int i) {
                 return i;
             }
+
             @Override
             public long getItemId(int i) {
                 return i;
             }
+
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 String number = send_list.get(i);
                 TextView tv = new TextView(MainActivity.this);
                 tv.setTextSize(20);
-                tv.setPadding(3,1,0,1);
+                tv.setPadding(3, 1, 0, 1);
                 tv.setText(number);
                 return tv;
             }
         };
-        final ListView listView1 = (ListView) findViewById(R.id.listSend);
-        listView1.setAdapter(adapter);
+        //View listViewIn = getLayoutInflater().inflate(R.layout.home_view, null);
+        ListView listViewSend = (ListView) findViewById(R.id.listSendQ);
+        listViewSend.setAdapter(adapter);
     }
-    private void initRes(){
-        final ArrayList<String> send_list=read.getRes(db);
+    private void initRes() {
+        final ArrayList<String> send_list = read.getRes(db);
         BaseAdapter adapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 return send_list.size();
             }
+
             @Override
             public Object getItem(int i) {
                 return i;
             }
+
             @Override
             public long getItemId(int i) {
                 return i;
             }
+
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 String number = send_list.get(i);
                 TextView tv = new TextView(MainActivity.this);
                 tv.setTextSize(20);
-                tv.setPadding(3,1,0,1);
+                tv.setPadding(3, 1, 0, 1);
                 tv.setText(number);
                 return tv;
             }
@@ -178,22 +212,24 @@ public class MainActivity extends AppCompatActivity {
         final ListView listView1 = (ListView) findViewById(R.id.sendRes);
         listView1.setAdapter(adapter);
     }
-    private ArrayList<String> getData(){
+
+    private ArrayList<String> getData() {
         ArrayList<String> data = read.getPhoneList(db);
         return data;
     }
-    private void ininSetView(){
+
+    private void ininSetView() {
         displaySet();
-        dialog=new Dialog(this);
-        savePhone= (Button) findViewById(R.id.savePhone);
-        setBu=(Button) findViewById(R.id.setBu);
-        disPlayPhone=(Button) findViewById(R.id.displayPhone);
+        dialog = new Dialog(this);
+        savePhone = (Button) findViewById(R.id.savePhone);
+        setBu = (Button) findViewById(R.id.setBu);
+        disPlayPhone = (Button) findViewById(R.id.displayPhone);
         saveAllText();
         setBu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 View listView1 = getLayoutInflater().inflate(R.layout.set_table, null);
-                Dialog alertDialog= new AlertDialog.Builder(MainActivity.this).setView(listView1).setPositiveButton("确定",
+                Dialog alertDialog = new AlertDialog.Builder(MainActivity.this).setView(listView1).setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -202,38 +238,36 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
                 Window window = alertDialog.getWindow();
                 window.setContentView(R.layout.set_table);
-                saveSetBu=(Button) window.findViewById(R.id.saveSetBu);
+                saveSetBu = (Button) window.findViewById(R.id.saveSetBu);
                 final EditText IntervaTime = (EditText) window.findViewById(R.id.setInterTime);
-                final EditText randTime=(EditText) window.findViewById(R.id.setRandTime);
+                final EditText randTime = (EditText) window.findViewById(R.id.setRandTime);
                 //开始和结束时间
                 final EditText StartTime = (EditText) window.findViewById(R.id.setStartTime);
                 final EditText endTime = (EditText) window.findViewById(R.id.setEndTime);
-
                 saveSetBu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //添加判断
-                        String start_time_s=StartTime.getText().toString();
-                        String randTime_s=randTime.getText().toString();
+                        String start_time_s = StartTime.getText().toString();
+                        String randTime_s = randTime.getText().toString();
                         String end_time_s = endTime.getText().toString();
                         String inter_time_s = IntervaTime.getText().toString();
-                        if (is_string_enpty(start_time_s)||is_string_enpty(randTime_s)||is_string_enpty(end_time_s)||is_string_enpty(inter_time_s)){
+                        if (is_string_enpty(start_time_s) || is_string_enpty(randTime_s) || is_string_enpty(end_time_s) || is_string_enpty(inter_time_s)) {
                             Toast.makeText(MainActivity.this, "请填写完整内容"
                                     , Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             Integer start_time = Integer.parseInt(StartTime.getText().toString());
                             Integer rand_time = Integer.parseInt(randTime.getText().toString());
                             Integer end_time = Integer.parseInt(endTime.getText().toString());
                             Integer inter_time = Integer.parseInt(IntervaTime.getText().toString());
-                            if (inter_time<=rand_time){
+                            if (inter_time <= rand_time) {
                                 Toast.makeText(MainActivity.this, "间隔时间应大于随机时间"
                                         , Toast.LENGTH_SHORT).show();
-                            }else {
-                                saveset.save(start_time, end_time, inter_time,rand_time);
+                            } else {
+                                saveset.save(start_time, end_time, inter_time, rand_time);
                                 displaySet();
                             }
                         }
-
                     }
                 });
             }
@@ -248,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 View listViewq = getLayoutInflater().inflate(R.layout.push_content, null);
-                final Dialog alertDialog1= new AlertDialog.Builder(MainActivity.this).setView(listViewq).setPositiveButton("确定",
+                final Dialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).setView(listViewq).setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -257,19 +291,19 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
                 Window window = alertDialog1.getWindow();
                 window.setContentView(R.layout.push_content);
-                final EditText startName=(EditText) window.findViewById(R.id.setStartCon);
-                final EditText endName=(EditText) window.findViewById(R.id.setEndCon);
-                Button readCon=(Button) window.findViewById(R.id.readCon);
+                final EditText startName = (EditText) window.findViewById(R.id.setStartCon);
+                //final EditText endName = (EditText) window.findViewById(R.id.setEndCon);
+                Button readCon = (Button) window.findViewById(R.id.readCon);
                 readCon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String sart=startName.getText().toString();
-                        String end=endName.getText().toString();
-                        if (is_string_enpty(sart)||is_string_enpty(end)){
+                        String sart = startName.getText().toString();
+                        //String end = endName.getText().toString();
+                        if (is_string_enpty(sart)) {
                             Toast.makeText(MainActivity.this, "请填写号码段"
                                     , Toast.LENGTH_SHORT).show();
-                        }else {
-                            final ArrayList<String> num_list = read.read(sart,end);
+                        } else {
+                            final ArrayList<String> num_list = read.read(sart);
                             alertDialog1.dismiss();
                             BaseAdapter adapter = new BaseAdapter() {
                                 @Override
@@ -289,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                                     String number = num_list.get(i);
                                     TextView tv = new TextView(MainActivity.this);
                                     tv.setTextSize(20);
-                                    tv.setPadding(3,1,0,1);
+                                    tv.setPadding(3, 1, 0, 1);
                                     tv.setText(number);
                                     return tv;
                                 }
@@ -310,7 +344,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void displayPhone(){
+
+    private void displayPhone() {
 
         final ArrayList<String> dataList = read.getPhoneList(db);
         BaseAdapter adapter = new BaseAdapter() {
@@ -318,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
             public int getCount() {
                 return dataList.size();
             }
+
             @Override
             public Object getItem(int i) {
                 return i;
@@ -327,12 +363,13 @@ public class MainActivity extends AppCompatActivity {
             public long getItemId(int i) {
                 return i;
             }
+
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
                 String number = dataList.get(i);
                 TextView tv = new TextView(MainActivity.this);
                 tv.setTextSize(18);
-                tv.setPadding(3,1,0,1);
+                tv.setPadding(3, 1, 0, 1);
                 tv.setText(number);
                 return tv;
             }
@@ -348,24 +385,25 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).show();
     }
+
     public void displaySet() {
-        TextView IntervaTime,Rand_time,StartTime,endTime,content1,content2,content3,content4,content5,content6;
-        IntervaTime=(TextView) findViewById(R.id.interTime);
-        Rand_time=(TextView) findViewById(R.id.setRand);
-        StartTime=(TextView) findViewById(R.id.starTime);
-        endTime=(TextView) findViewById(R.id.endTime);
-        content1=(TextView) findViewById(R.id.text1);
-        content2=(TextView) findViewById(R.id.text2);
-        content3=(TextView) findViewById(R.id.text3);
-        content4=(TextView) findViewById(R.id.text4);
-        content5=(TextView) findViewById(R.id.text5);
-        content6=(TextView) findViewById(R.id.text6);
+        TextView IntervaTime, Rand_time, StartTime, endTime, content1, content2, content3, content4, content5, content6;
+        IntervaTime = (TextView) findViewById(R.id.interTime);
+        Rand_time = (TextView) findViewById(R.id.setRand);
+        StartTime = (TextView) findViewById(R.id.starTime);
+        endTime = (TextView) findViewById(R.id.endTime);
+        content1 = (TextView) findViewById(R.id.text1);
+        content2 = (TextView) findViewById(R.id.text2);
+        content3 = (TextView) findViewById(R.id.text3);
+        content4 = (TextView) findViewById(R.id.text4);
+        content5 = (TextView) findViewById(R.id.text5);
+        content6 = (TextView) findViewById(R.id.text6);
         String text1 = saveset.getText(1);
         String text2 = saveset.getText(2);
-        String text3=saveset.getText(3),text4=saveset.getText(4),text5=saveset.getText(5),
-        text6=saveset.getText(6);
+        String text3 = saveset.getText(3), text4 = saveset.getText(4), text5 = saveset.getText(5),
+                text6 = saveset.getText(6);
         int i = 0;
-        String in_time = "", start_time = "", end_time = "",rand_time="";
+        String in_time = "", start_time = "", end_time = "", rand_time = "";
         Cursor cursor = null, cursor1 = null;
         try {
             cursor = db.rawQuery("select * from save_text_table", null);
@@ -381,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
                 start_time = cursor1.getString(cursor1.getColumnIndexOrThrow("start_time"));
                 end_time = cursor1.getString(cursor1.getColumnIndexOrThrow("end_time"));
                 in_time = cursor1.getString(cursor1.getColumnIndexOrThrow("interva_time"));
-                rand_time=cursor1.getString(cursor1.getColumnIndexOrThrow("rand_time"));
+                rand_time = cursor1.getString(cursor1.getColumnIndexOrThrow("rand_time"));
             }
         }
 
@@ -397,12 +435,15 @@ public class MainActivity extends AppCompatActivity {
         content5.setText(text5);
         content6.setText(text6);
     }
-    public void ininIndex(){
-        sendSms=(Button) findViewById(R.id.sendSms);
-        clearSend=(Button) findViewById(R.id.clearSend);
-        addSend=(Button) findViewById(R.id.addSend);
-        final EditText StartNum=(EditText) findViewById(R.id.StartNum);
-        final EditText EndNum=(EditText) findViewById(R.id.EndNum);
+
+    public void ininIndex() {
+        sendSms = (Button) findViewById(R.id.sendSms);
+        clearSend = (Button) findViewById(R.id.clearSend);
+        addSend = (Button) findViewById(R.id.addSend);
+        final EditText StartNum = (EditText) findViewById(R.id.StartNum);
+        final EditText EndNum = (EditText) findViewById(R.id.EndNum);
+        displaySend();
+
         clearSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -410,19 +451,19 @@ public class MainActivity extends AppCompatActivity {
                 displaySend();
             }
         });
-        lastView=(TextView) findViewById(R.id.lastTimeIn);
+        lastView = (TextView) findViewById(R.id.lastTimeIn);
         sendSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                receiver=new MyReceiver();
-                IntentFilter filter=new IntentFilter();
+                receiver = new MyReceiver();
+                IntentFilter filter = new IntentFilter();
                 filter.addAction("com.example.hakim.anview.MyReceiver");
-                MainActivity.this.registerReceiver(receiver,filter);
-                if (myservice==null){
-                    myservice= new Intent(MainActivity.this, sendService.class);
+                MainActivity.this.registerReceiver(receiver, filter);
+                if (myservice == null) {
+                    myservice = new Intent(MainActivity.this, sendService.class);
                     startService(myservice);
-                }else {
-                    final Dialog alertDialog= new AlertDialog.Builder(MainActivity.this).setMessage("是否关闭当前进程").setPositiveButton("是",
+                } else {
+                    final Dialog alertDialog = new AlertDialog.Builder(MainActivity.this).setMessage("是否关闭当前进程").setPositiveButton("是",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -453,8 +494,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         //已经发送完，或者为空
                         String start, end;
-                        int i=0;
-                        String mm = StartNum.getText().toString();
+                        int i = 0;
                         if (StartNum.getText().toString().length() == 0 || EndNum.getText().toString().length() == 0) {
                             Toast.makeText(MainActivity.this, "请确实是否填写号码段", Toast.LENGTH_LONG).show();
                         } else {
@@ -469,16 +509,16 @@ public class MainActivity extends AppCompatActivity {
                                     int smsID = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
                                     String smsName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
                                     //num varchar(225),is_send integer,name varchar(225),numID integer)
-                                    String sql = "insert into send_sms_table VALUES ('"+sms+"',0,'"+smsName+"',"+smsID+")";
+                                    String sql = "insert into send_sms_table VALUES ('" + sms + "',0,'" + smsName + "'," + smsID + ")";
                                     db.execSQL(sql);
                                 }
                             }
                         }
-                        if (i>0){
+                        if (i > 0) {
                             Toast.makeText(MainActivity.this, "保存成功"
                                     , Toast.LENGTH_SHORT).show();
                             displaySend();
-                        }else {
+                        } else {
                             Toast.makeText(MainActivity.this, "未查到数据"
                                     , Toast.LENGTH_SHORT).show();
                         }
@@ -491,7 +531,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
+
     public boolean is_empty(String name) {
         //db.execSQL("delete from send_sms_table");
         Cursor cursor = db.rawQuery("select * from " + name + " where is_send = 0", null);
@@ -504,21 +546,23 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-    public boolean is_string_enpty(String str){
+
+    public boolean is_string_enpty(String str) {
         //为空时返回true
-        boolean res=false;
-        if (str == null || str.length() <= 0){
-            res=true;
+        boolean res = false;
+        if (str == null || str.length() <= 0) {
+            res = true;
         }
         return res;
     }
-    public void saveAllText(){
-        set_content1=(Button) findViewById(R.id.setText1);
-        set_content2=(Button) findViewById(R.id.setText2);
-        set_content3=(Button) findViewById(R.id.setText3);
-        set_content4=(Button) findViewById(R.id.setText4);
-        set_content5=(Button) findViewById(R.id.setText5);
-        set_content6=(Button) findViewById(R.id.setText6);
+
+    public void saveAllText() {
+        set_content1 = (Button) findViewById(R.id.setText1);
+        set_content2 = (Button) findViewById(R.id.setText2);
+        set_content3 = (Button) findViewById(R.id.setText3);
+        set_content4 = (Button) findViewById(R.id.setText4);
+        set_content5 = (Button) findViewById(R.id.setText5);
+        set_content6 = (Button) findViewById(R.id.setText6);
         set_content1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -556,10 +600,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void saveAllTextAler(int index){
+
+    private void saveAllTextAler(int index) {
         View view1 = getLayoutInflater().inflate(R.layout.set_text, null);
-        final int id=index;
-        final Dialog alertDialog= new AlertDialog.Builder(MainActivity.this).setView(view1).setPositiveButton("确定",
+        final int id = index;
+        final Dialog alertDialog = new AlertDialog.Builder(MainActivity.this).setView(view1).setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -568,8 +613,8 @@ public class MainActivity extends AppCompatActivity {
                 }).show();
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.set_text);
-        final EditText content1=(EditText) window.findViewById(R.id.setEditTextq);
-        Button setText =(Button) window.findViewById(R.id.setTextq);
+        final EditText content1 = (EditText) window.findViewById(R.id.setEditTextq);
+        Button setText = (Button) window.findViewById(R.id.setTextq);
         setText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -581,17 +626,116 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         alertDialog.dismiss();
                     }
-                },1000);
+                }, 1000);
             }
         });
     }
+
     public class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle bundle=intent.getExtras();
-            int count=bundle.getInt("count");
+            Bundle bundle = intent.getExtras();
+            int count = bundle.getInt("count");
             //progressBar.setProgress(count);
-            lastView.setText(count+"");
+            lastView.setText(count + "");
         }
     }
+
+    //申请权限
+    // 提示用户该请求权限的弹出框
+    private void showDialogTipUserRequestPermission() {
+        new AlertDialog.Builder(this)
+                .setTitle("权限不可用")
+                .setMessage("由于需要使用读取联系人，发送短信等权限，否则无法正常使用")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startRequestPermission();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+    }
+
+    private void startRequestPermission() {
+        ActivityCompat.requestPermissions(this, permissions, 321);
+    }
+
+    // 用户权限 申请 的回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 321) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[0]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    } else
+                        finish();
+                } else {
+                    Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void showDialogTipUserGoToAppSettting() {
+        dialog = new AlertDialog.Builder(this)
+                .setTitle("权限不可用")
+                .setMessage("请在-应用设置-权限-中，允许使用存储，读取联系人，发送短信等权限")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 跳转到应用设置界面
+                        goToAppSetting();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+    }
+    private void goToAppSetting() {
+        Intent intent = new Intent();
+
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+
+        startActivityForResult(intent, 123);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123) {
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // 检查该权限是否已经获取
+                int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+                // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+                if (i != PackageManager.PERMISSION_GRANTED) {
+                    // 提示用户应该去应用设置界面手动开启权限
+                    showDialogTipUserGoToAppSettting();
+                } else {
+                    if (dialog != null && dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+    //加载等待
 }

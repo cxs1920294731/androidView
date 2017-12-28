@@ -23,11 +23,11 @@ public class readContacts {
         this.context=context;
     }
     private String start;
-    private String end;
+    //private String end;
     private ArrayList<ArrayList<String>> dataPhone=new ArrayList<>();
-    public ArrayList<String> read(String start,String end){
+    public ArrayList<String> read(String start){
         this.start=start;
-        this.end=end;
+        //this.end=end;
         ArrayList<String> res=new ArrayList<String>();
         ArrayList<String> sendList=new ArrayList<String>();
         ArrayList<String> no_sendList=new ArrayList<String>();
@@ -50,11 +50,7 @@ public class readContacts {
                 String PhoneID = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts._ID));
                 String phoneName = cursor_num.getString(cursor_num.getColumnIndex(android.provider.ContactsContract.Contacts.DISPLAY_NAME));
                 // 当手机号码为空的或者为空字段 跳过当前循环
-                if (phoneName.equals(start)){
-                    sta=true;
-                }
-
-                if (sta){
+                if (phoneName.contains(start)){
                     if (is_cell_num(phoneNumber)){
                         row.add(phoneName);
                         row.add(phoneNumber);
@@ -63,9 +59,6 @@ public class readContacts {
                     }else {
                         no_sendList.add(i+"--"+phoneName+"--"+phoneNumber);
                     }
-                }
-                if (phoneName.equals(end)){
-                    sta=false;
                 }
             }
             res.add("不符合条件的号码");
@@ -78,8 +71,9 @@ public class readContacts {
     public Boolean saveNumber(SQLiteDatabase db){
         try{
             db.execSQL("delete from save_monbile_table");
+            db.execSQL("UPDATE sqlite_sequence SET seq = 0 WHERE name ='save_monbile_table'");
             for (int i=0;i< dataPhone.size();i++){
-                String phoneName=  dataPhone.get(i).get(0);
+                String phoneName=dataPhone.get(i).get(0);
                 String phoneNumber=dataPhone.get(i).get(1);
                 db.execSQL("insert into save_monbile_table (monbile,name) values ('"+phoneNumber+"','"+phoneName+"')");
             }
@@ -107,11 +101,12 @@ public class readContacts {
     }
     public Cursor sendList(SQLiteDatabase db,String start,String end){
         Cursor cursor=null;
-        int startID=0,endID=0;
-        Cursor cursor1=db.rawQuery("select * from save_monbile_table where name='"+start+"'",null);
-        startID=getFirst(cursor1);
-        Cursor cursor2=db.rawQuery("select * from save_monbile_table where name='"+end+"'",null);
-        endID=getFirst(cursor2);
+        int startID=Integer.valueOf(start);
+        int endID=Integer.valueOf(end);
+//        Cursor cursor1=db.rawQuery("select * from save_monbile_table where name='"+start+"'",null);
+//        startID=getFirst(cursor1);
+//        Cursor cursor2=db.rawQuery("select * from save_monbile_table where name='"+end+"'",null);
+//        endID=getFirst(cursor2);
         cursor=db.rawQuery("select * from save_monbile_table where id>="+startID+" and id<="+endID,null);
         return cursor;
     }

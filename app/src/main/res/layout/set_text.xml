@@ -21,6 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@drawable/button"
-            android:text="修改短信1" />
+            android:text="修改短信" />
     </LinearLayout>
 </LinearLayout>

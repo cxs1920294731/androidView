@@ -11,7 +11,6 @@ import android.os.PowerManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
 public class sendService extends Service {
     private int count=0;
     private Long SetTime;
@@ -24,7 +23,6 @@ public class sendService extends Service {
     Timer timer;
     public sendService() {
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -45,7 +43,6 @@ public class sendService extends Service {
         timer.schedule(timeTask, 0, 1000);
         acquire();
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
@@ -71,7 +68,6 @@ public class sendService extends Service {
             }
         }
     }
-
     private void release()
     {
         if (null != wakeLock)
@@ -89,7 +85,6 @@ public class sendService extends Service {
             sendBroadcast(inte);
             Long x=System.currentTimeMillis();
             if(timerT.isTime()){
-
                 if (System.currentTimeMillis() > SetTime) {
                     Long y=System.currentTimeMillis();
                     int randTime=timerT.getRandTime();
@@ -107,8 +102,6 @@ public class sendService extends Service {
                     count=-1;
                 }
             }
-
-
         }
     }
     public void id_return(){
@@ -122,7 +115,6 @@ public class sendService extends Service {
                         onDestroy();
                     }
                 }, 3000);
-
             }
         }else {
             Handler handler = new Handler();
