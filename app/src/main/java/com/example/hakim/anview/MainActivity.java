@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private BottomNavigationView navigation;
     private NoSlidingViewPaper mViewPager;
+    private ScreenReceiverUtil mScreenListener;
     private MyReceiver receiver = null;
     readContacts read = new readContacts(this);
     MyData dehelper;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private int timeR;
     private Intent myservice;
     private ProgressBar progressBar;
+    private ScreenManager mScreenManager;
     //权限判断
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS};
     private AlertDialog dialogQ;
@@ -101,6 +103,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private ScreenReceiverUtil.SreenStateListener mScreenListenerer = new ScreenReceiverUtil.SreenStateListener() {
+        @Override
+        public void onSreenOn() {
+            // 亮屏，移除"1像素"
+            mScreenManager.finishActivity();
+        }
+        @Override
+        public void onSreenOff() {
+            mScreenManager.startActivity();
+        }
+        @Override
+        public void onUserPresent() {
+            // 解锁，暂不用，保留
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,8 +160,10 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //注册后台事件
         //权限申请
+        mScreenListener = new ScreenReceiverUtil(this);
+        mScreenManager = ScreenManager.getScreenManagerInstance(this);
+        mScreenListener.setScreenReceiverListener(mScreenListenerer);
     }
-
     protected void onResume(){
         super.onResume();
         mViewPager.setCurrentItem(0);

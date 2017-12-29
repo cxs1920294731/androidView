@@ -7,14 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import java.util.Timer;
 import java.util.TimerTask;
 public class sendService extends Service {
+    private final static String TAG="PlayerMUsic";
+    private MediaPlayer mediaPlayer;
     private int count=0;
     private Long SetTime;
     private TimerT timerT;
@@ -31,12 +36,14 @@ public class sendService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate() {
         super.onCreate();
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(sendService.this)
+        //Notification.Builder builder = new Notification.Builder(this);
+        Notification.Builder mNotifyBuilder = new Notification.Builder(sendService.this)
                 .setSmallIcon(R.drawable.ic_dashboard_black_24dp)
                 .setTicker("正在发短信")
                 .setWhen(System.currentTimeMillis())
@@ -45,7 +52,10 @@ public class sendService extends Service {
                 .setContentIntent(pendingIntent);
         Notification notification = mNotifyBuilder.build();
         /*使用startForeground,如果id为0，那么notification将不会显示*/
-        startForeground(1, notification);
+        startForeground(100, notification);
+        //播放音乐
+        mediaPlayer=MediaPlayer.create(getApplicationContext(),R.raw.silent);
+        mediaPlayer.setLooping(true);
         timer = new Timer();
         timeTask=new mytask();
         dehelper = new MyData(this, "mySend.db3", null, 1);
@@ -60,14 +70,20 @@ public class sendService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startPlayMusic();
+            }
+        }).start();
+        return  START_STICKY;
     }
     @Override
     public void onDestroy() {
         stopForeground(true);
-        timer.cancel();
-        timer=null;
-        timeTask=null;
+//        timer.cancel();
+//        timer=null;
+//        timeTask=null;
         super.onDestroy();
         super.stopSelf();
         release();
@@ -140,6 +156,16 @@ public class sendService extends Service {
                     onDestroy();
                 }
             }, 3000);
+        }
+    }
+    private void startPlayMusic(){
+        if(mediaPlayer != null){
+            mediaPlayer.start();
+        }
+    }
+    private void stopPlayMusic(){
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
         }
     }
 }
