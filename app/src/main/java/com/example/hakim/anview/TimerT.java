@@ -32,7 +32,6 @@ public class TimerT {
         this.send=new sendSMS(context,db);
         this.redSet=new saveSet(context,db);
     }
-
     public boolean isTime(){
         int[] a = new int[2];
         a = redSet.get_start_end_time();

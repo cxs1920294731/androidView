@@ -36,18 +36,6 @@ public class sendService extends Service {
         super.onCreate();
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-    /* Method 01
-     .setSmallIcon(R.drawable.ic_launcher)
-            .setWhen(System.currentTimeMillis())
-            .setTicker("有通知到来")
-            .setContentTitle("这是通知的标题")
-            .setContentText("这是通知的内容")
-            .setOngoing(true)
-            .setContentIntent(pendingIntent)
-            .build();
-     * this method must SET SMALLICON!
-     * otherwise it can't do what we want in Android 4.4 KitKat,
-     * it can only show the application info page which contains the 'Force Close' button.*/
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(sendService.this)
                 .setSmallIcon(R.drawable.ic_dashboard_black_24dp)
                 .setTicker("正在发短信")
